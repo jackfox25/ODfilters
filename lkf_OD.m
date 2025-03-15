@@ -68,10 +68,10 @@ function lkfOut = lkf_OD(t_0,Xhat_0,P_0,meas,params,sysFuncs,verbosity)
             % Time update
             xbar_i = STM_im1toi * xhat_im1;
 
-            if params.settings.noiseComp == "SNC" && (t_i-t_im1) < params.SNC.thresh
+            if strcmp(params.settings.noiseComp,"SNC") && (t_i-t_im1) < params.SNC.thresh
                 comp = params.SNC.Gam(t_i-t_im1) * getQ_SNC(Xref_im1,params) * params.SNC.Gam(t_i-t_im1)';
                 
-            elseif params.settings.noiseComp == "DMC" && (t_i-t_im1) < params.DMC.thresh
+            elseif strcmp(params.settings.noiseComp,"DMC") && (t_i-t_im1) < params.DMC.thresh
                 comp = getQ_DMC(t_i-t_im1,Xref_im1,params);
                 
             else
