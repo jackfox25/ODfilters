@@ -143,7 +143,7 @@ function srifOut = srif_OD(t_0,Xhat_0,P_0,meas,params,sysFuncs,verbosity)
         bbar_im1 = bbar_i;
 
         % Display status
-        if verbosity && mod(i,10)==0
+        if verbosity && (mod(i,10)==0 || i==k)
             fprintf('SRIF: Processed measurement %d of %d\n',i,k);
         end
     end
