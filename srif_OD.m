@@ -21,6 +21,7 @@
 %      - P_hist          (kxn^2) State covariance history for each measurement time
 %      - xhat_hist       (kxn) State deviation history for each measurement time
 %      - Rbar_hist       (kxn^2) Square root of state covariance history
+%      - Xref_hist       (kxn^2) Reference state propagated (from initial state)
 %      - STM_im1toi_hist (kxn^2) Incremental state transition matrices (ref)
 % =========================================================================
 function srifOut = srif_OD(t_0,Xhat_0,P_0,meas,params,sysFuncs,verbosity)
@@ -148,7 +149,7 @@ function srifOut = srif_OD(t_0,Xhat_0,P_0,meas,params,sysFuncs,verbosity)
         end
     end
 
-    % Store outputs in the same format as LKF
+    % Store outputs in struct
     srifOut.Xhat_hist = Xhat_hist;
     srifOut.P_hist = P_hist;
     srifOut.xhat_hist = xhat_hist;
