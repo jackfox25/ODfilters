@@ -74,11 +74,9 @@ function ukfOut = ukf_OD(t_0,Xhat_0,P_0,meas,params,sysFuncs,verbosity)
 
         % Propagate each sigma point to t_i
         if t_i > t_im1
-            for j=1:2*n+1
-                [~, xh] = ode45(@(t,x) sysFuncs.computeStateDot(t,x,params),...
-                                [t_im1 t_i], Chi_list_im1(:,j), params.settings.OPTIONS);
-                Chi_list_i(:,j) = xh(end,:)';
-            end
+            [~, xh] = ode45(@(t,x) sysFuncs.computeStateDot(t,x,n,2*n+1,params),...
+                            [t_im1 t_i], reshape(Chi_list_im1,n*(2*n+1),1), params.settings.OPTIONS);
+            Chi_list_i = reshape(xh(end,:)',n,2*n+1);
         else
             Chi_list_i = Chi_list_im1;
         end
