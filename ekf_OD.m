@@ -25,7 +25,7 @@ function [Xhat_hist,P_hist] = ekf_OD(t_0,Xhat_0,P_0,meas,params,sysFuncs,verbosi
 
     % === PROCESS SET OF MEASUREMENTS AS CKF/LKF TO INITIALIZE === %
     nLKF = params.settings.EKFinitThr;
-    if size(meas,1) > nLKF && exist("lkf_OD.m","file")
+    if size(meas,1) > nLKF && nLKF > 0 && exist("lkf_OD.m","file")
         fprintf('EKF: Initializing %d measurements as LKF\n',nLKF);
         lkfMeas = meas(1:nLKF,:);
         lkfOut = lkf_OD(t_0,Xhat_0,P_0,lkfMeas,params,sysFuncs,verbosity);
@@ -145,7 +145,7 @@ function [Xhat_hist,P_hist] = ekf_OD(t_0,Xhat_0,P_0,meas,params,sysFuncs,verbosi
     end
 
     % Append EKF solution to LKF solution
-    if size(meas,1) > nLKF
+    if size(meas,1) > nLKF && nLKF > 0
         Xhat_hist = [Xhat_hist_LKF; Xhat_hist];
         P_hist = [P_hist_LKF; P_hist];
     end
