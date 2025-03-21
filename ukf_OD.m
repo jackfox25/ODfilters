@@ -50,7 +50,6 @@ function ukfOut = ukf_OD(t_0,Xhat_0,P_0,meas,params,sysFuncs,verbosity)
 
     % Sigma point arrays
     Chi_list_im1 = zeros(n,2*n+1);
-    Chi_list_i   = zeros(n,2*n+1);
 
     % Create containers
     Xhat_hist = zeros(k,n);
@@ -65,7 +64,15 @@ function ukfOut = ukf_OD(t_0,Xhat_0,P_0,meas,params,sysFuncs,verbosity)
 
         % =============== DYNAMICS PREDICTION STEP =============== %
         % Generate sigma points at t_im1
-        S_im1 = chol(P_im1,"upper");
+        try
+            S_im1 = chol(P_im1,"upper");
+        catch
+            [V, D] = eig(P_im1);
+            D(D < eps) = eps;  % Replace small/negative eigenvalues
+            P_im1 = V * D * V'; 
+            S_im1 = chol(P_im1, "upper"); % Retry decomposition
+        end
+        
         Chi_list_im1(:,1) = Xhat_im1;
         for j=1:n
             Chi_list_im1(:,1+j)   = Xhat_im1 + sqrt(n+lambda) * S_im1(j,:)';
@@ -103,7 +110,15 @@ function ukfOut = ukf_OD(t_0,Xhat_0,P_0,meas,params,sysFuncs,verbosity)
 
         % =============== MEASUREMENT UPDATE STEP =============== %
         % Generate new sigma points at t_i based on Xbar_i and Pbar_i
-        S_i = chol(Pbar_i,"upper");
+        try
+            S_i = chol(Pbar_i,"upper");
+        catch
+            [V, D] = eig(Pbar_i);
+            D(D < eps) = eps;  % Replace small/negative eigenvalues
+            Pbar_i = V * D * V'; 
+            S_i = chol(Pbar_i, "upper"); % Retry decomposition
+        end
+        
         Chi_list_i(:,1) = Xbar_i;
         for j=1:n
             Chi_list_i(:,1+j)   = Xbar_i + sqrt(n+lambda) * S_i(j,:)';
@@ -125,11 +140,14 @@ function ukfOut = ukf_OD(t_0,Xhat_0,P_0,meas,params,sysFuncs,verbosity)
         Cxy = (Chi_list_i - Xbar_i) * dwts_c * (gamma_list_i - Ybar_i)';
 
         % Compute Kalman gain
-        K_i = Cxy / Sbar_i;
+        K_i = Cxy * (Sbar_i \ eye(size(Sbar_i)));
 
         % Measurement update
         Xhat_i = Xbar_i + K_i * (Y_i(3:end)' - Ybar_i);
         P_i = Pbar_i - K_i * Sbar_i * K_i';
+        
+        % Ensure P_i is symmetric
+        P_i = (P_i + P_i') / 2;
 
         % =============== SAVE, SET NEXT ITERATION =============== %
         Xhat_hist(i,:) = Xhat_i';
