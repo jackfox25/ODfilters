@@ -89,7 +89,7 @@ function ukfOut = ukf_OD(t_0,Xhat_0,P_0,meas,params,sysFuncs,verbosity)
         end
 
         % Add process noise
-        if strcmp(params.settings.noiseComp,"SNC")
+        if strcmp(params.settings.noiseComp,"SNC") && (t_i-t_im1) < params.SNC.thresh
             SNC = params.SNC.Gam(t_i-t_im1) * getQ_SNC(Xhat_im1,params) * params.SNC.Gam(t_i-t_im1)';
             % Pad with zeros for extra non-accel states
             if size(SNC,1) < n
