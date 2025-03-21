@@ -16,10 +16,11 @@
 %       - sysFuncs.computeMeasResidual
 %    verbosity   (bool) Flag for output text
 % Outputs:
-%    Xhat_hist   (kxn) Full state history for each measurement time
-%       P_hist   (kxn) State covariance history for each measurement time
+%     ekfOut   Struct containing outputs from EKF
+%      - Xhat_hist       (kxn) Full state history for each measurement time
+%      - P_hist          (kxn^2) State covariance history for each measurement time
 % =========================================================================
-function [Xhat_hist,P_hist] = ekf_OD(t_0,Xhat_0,P_0,meas,params,sysFuncs,verbosity)
+function ekfOut = ekf_OD(t_0,Xhat_0,P_0,meas,params,sysFuncs,verbosity)
 
     n = size(Xhat_0,1);
 
@@ -149,5 +150,8 @@ function [Xhat_hist,P_hist] = ekf_OD(t_0,Xhat_0,P_0,meas,params,sysFuncs,verbosi
         Xhat_hist = [Xhat_hist_LKF; Xhat_hist];
         P_hist = [P_hist_LKF; P_hist];
     end
+
+    ekfOut.Xhat_hist = Xhat_hist;
+    ekfOut.P_hist = P_hist;
 
 end
