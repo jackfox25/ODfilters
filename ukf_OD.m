@@ -16,7 +16,7 @@
 %       - sysFuncs.computeMeasurement (NL)
 %    verbosity   (bool) Flag for output text
 % Outputs:
-%     ukfOut   Struct containing outputs from SRIF
+%     ukfOut   Struct containing outputs from UKF
 %      - Xhat_hist       (kxn) Full state history for each measurement time
 %      - P_hist          (kxn^2) State covariance history for each measurement time
 % =========================================================================
