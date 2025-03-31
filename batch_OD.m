@@ -58,7 +58,7 @@ function batchOut = batch_OD(t_0,Xhat_0,P_0,meas,params,sysFuncs,info)
         N = P_0 \ xbar_0;
     
         Xref_aug_0 = [Xref_im1; reshape(STM_0toim1,n^2,1)];
-        [~,Xref_hist] = ode45(@(t,x) sysFuncs.computeAugStateDot(t,x,params),...
+        [~,Xref_hist] = params.settings.integrator(@(t,x) sysFuncs.computeAugStateDot(t,x,params),...
                                      tspan,Xref_aug_0,params.settings.OPTIONS);
 
         % Loop over measurements

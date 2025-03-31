@@ -66,7 +66,7 @@ function srifOut = srif_OD(t_0,Xhat_0,P_0,meas,params,sysFuncs,verbosity)
             Xref_im1_aug = [Xref_im1; reshape(STM_im1,n^2,1)];
             
             % Propagate reference trajectory and STM using dynamics
-            [~, xah] = ode45(@(t,x) sysFuncs.computeAugStateDot(t,x,params),...
+            [~, xah] = params.settings.integrator(@(t,x) sysFuncs.computeAugStateDot(t,x,params),...
                              [t_im1 t_i], Xref_im1_aug, params.settings.OPTIONS);
             
             Xref_i = xah(end,1:n)';
