@@ -126,7 +126,6 @@ function ekfOut = ekf_OD(t_0,Xhat_0,P_0,meas,params,sysFuncs,verbosity)
         % Measurement and reference orbit update
         xhat_i = K_i * y_i;
         Xref_i = Xref_i + xhat_i;
-        %P_i = (eye(n) - K_i * Htilde_i) * Pbar_i;
         P_i = (eye(n) - K_i * Htilde_i) * Pbar_i * (eye(n) - K_i * Htilde_i)' + K_i * R * K_i';
 
         % Save to history
