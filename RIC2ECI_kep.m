@@ -1,5 +1,5 @@
 % ============================================================
-% Function: RIC2ECI
+% Function: RIC2ECI_kep
 % Author: Jack Fox
 % Date: 9/20/23
 %     Generates rotation matrix for transformation from 
@@ -14,7 +14,7 @@
 % Outputs:
 %        C   direction cosine matrix 
 % ============================================================
-function C = RIC2ECI(inc, raan, w, thstar)
+function C = RIC2ECI_kep(inc, raan, w, thstar)
     
     if isnan(inc)
         inc = 0;
